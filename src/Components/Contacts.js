@@ -24,7 +24,7 @@ export default class Contacts extends Component {
     }
     
     
-    alertMessage = () => Alert.alert(this.state.results);
+    alertMessage = () => Alert.alert(this.state.results[0].gender);
     
     render() {
         return (
