@@ -1,9 +1,40 @@
 import React, {Component} from 'react';
 import {View, TextInput, StyleSheet, Image,Text} from 'react-native';
 
+
 export default class SearchArea extends Component {
+
+
+    constructor(props){
+        super(props);
+        this.state={
+            loading:false,
+            data:[],
+            searchInput:'',
+            error:null,
+
+        };
+        this.arrayholder=[];
+    }
+
+    searchFilterFunction = text => {
+        const newData = this.arrayholder.filter(item => {
+            const itemData =`${item.name.title.toUpperCase()}
+            ${item.name.first.toUpperCase()}
+            ${item.name.last.toUpperCase()}`;
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData)> -1;
+        });
+        this.setState({data:newData});
+    };
+
+    
+
+
     render() {
+
         return (
+
             <View style={styles.search}>
                 <View style={styles.searchBox}>
                     <View>
@@ -12,7 +43,12 @@ export default class SearchArea extends Component {
                         />
                     </View>
                     <View style={styles.searchTextView}>
-                        <Text style={styles.searchText}>Search by names and numbers</Text>
+                        <TextInput
+                            style={styles.searchText}
+                            value={this.state.search}
+                            placeholder={'Search by names and numbers'}
+                            onChange={text => this.searchFilterFunction(text)}>
+                        </TextInput>
                     </View>
                 </View>
             </View>
@@ -43,6 +79,6 @@ const styles = StyleSheet.create({
     searchText:{
         color:'#aeaebd',
         fontWeight: 'bold',
-        
+
     }
 });

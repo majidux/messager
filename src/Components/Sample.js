@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Image, FlatList, ActivityIndicator, TouchableHighlight, Alert} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    FlatList,
+    ActivityIndicator,
+    TouchableHighlight,
+    Alert,
+    TextInput
+} from 'react-native';
 
 
 export default class Contacts extends Component {
@@ -7,8 +17,8 @@ export default class Contacts extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataSource: []
-        }
+            filteredData: [],
+        };
     }
     
     componentDidMount() {
@@ -16,21 +26,51 @@ export default class Contacts extends Component {
         fetch('https://randomuser.me/api/?results=15')
             .then(response => response.json())
             .then(data => {
+                
+                this.data = data.results;
                 this.setState({
-                    dataSource: data.results
+                    filteredData: this.data
                 });
-                this.arrayholder = data.results;
             })
             .catch(error => alert('Cannot Find Server'));
     }
     
     
+    
+    searchFilterFunction = text => {
+        let result = this.data.filter(contact => `${contact.name.first} ${contact.name.last}`.contains(text));
+        this.setState({
+            filteredData: result
+        });
+    };
+    
+    
     render() {
         return (
             <View style={styles.contact}>
+                
+                <View style={styles.search}>
+                    <View style={styles.searchBox}>
+                        <View>
+                            <Image
+                                source={require('../Assets/image/search.png')}
+                            />
+                        </View>
+                        <View style={styles.searchTextView}>
+                            <TextInput
+                                style={styles.searchText}
+                                placeholder={'Search by names and numbers'}
+                                onChangeText={this.searchFilterFunction.bind(this)}>
+                            </TextInput>
+                        </View>
+                    </View>
+                </View>
+                
+                
+                
                 <FlatList
-                    data={this.state.dataSource}
-                    keyExtractor={(item) => item.id.value}
+                    data={this.state.filteredData}
+                    keyExtractor={(item) => item.email}
                     renderItem={({item}) =>
                         <View style={{justifyContent:'space-between',flexDirection: 'row',alignItems:'center'}}>
                             <View style={styles.contactBox}>
@@ -106,6 +146,31 @@ const styles = StyleSheet.create({
     checkedImage: {
         width: 12,
         height: 12
+    },
+    search: {
+        backgroundColor:'#ffffff',
+        paddingBottom:10,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    searchBox:{
+        backgroundColor: '#fafafb',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 10,
+        minWidth:390,
+        maxWidth:390,
+        borderRadius:30,
+        borderColor:'#f5f5f6',
+        borderWidth: 2
+    },
+    searchTextView:{
+        marginLeft: 10
+    },
+    searchText:{
+        color:'#aeaebd',
+        fontWeight: 'bold',
+        
     }
     
 });
