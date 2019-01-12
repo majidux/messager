@@ -5,9 +5,6 @@ import {
     StyleSheet,
     Image,
     FlatList,
-    ActivityIndicator,
-    TouchableHighlight,
-    Alert,
     TextInput
 } from 'react-native';
 
@@ -22,11 +19,9 @@ export default class Contacts extends Component {
     }
     
     componentDidMount() {
-        
         fetch('https://randomuser.me/api/?results=15')
             .then(response => response.json())
             .then(data => {
-                
                 this.data = data.results;
                 this.setState({
                     filteredData: this.data
@@ -38,7 +33,7 @@ export default class Contacts extends Component {
     
     
     searchFilterFunction = text => {
-        let result = this.data.filter(contact => `${contact.name.first} ${contact.name.last}`.contains(text));
+        let result = this.data.filter(contact => `${contact.name.first} ${contact.name.last}`.includes(text));
         this.setState({
             filteredData: result
         });

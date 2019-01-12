@@ -34,7 +34,7 @@ export default class Header extends Component {
 }
 const styles = StyleSheet.create({
     header: {
-        flex: 2,
+        height:200,
         backgroundColor:'#ffffff',
         paddingHorizontal: 15,
         justifyContent: 'space-around'
